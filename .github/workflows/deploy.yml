@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout deployment configuration
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Read pinned source commit
         id: source
@@ -28,11 +28,13 @@ jobs:
         run: echo "ref=$(tr -d '[:space:]' < source-ref.txt)" >> "$GITHUB_OUTPUT"
 
       - name: Checkout website source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: Nuthatch-Inc/nuthatch-desktop
           ref: ${{ steps.source.outputs.ref }}
           path: source
+          ssh-key: ${{ secrets.NUTHATCH_SOURCE_DEPLOY_KEY }}
+          persist-credentials: false
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
